@@ -32,15 +32,18 @@ def infer(model, image_path, device):
 
   return predicted_label
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 model = models.resnet18(weights=ResNet18_Weights.IMAGENET1K_V1)
 model.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3, bias=False)
 num_features = model.fc.in_features
 model.fc = nn.Linear(num_features, 2)
-
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
 
-image_path = "path_to_image.jpg"
+state_dict = torch.load('/content/model_covid_classifier.pth', weights_only=True)
+model.load_state_dict(state_dict)
+
+image_path = "/content/inference/positive3.jpeg"
 
 predicted_label = infer(model, image_path, device)
 
