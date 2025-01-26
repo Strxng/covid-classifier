@@ -33,7 +33,7 @@ def infer(model, image_path, device):
   return predicted_label
 
 model = models.resnet18(weights=ResNet18_Weights.IMAGENET1K_V1)
-model.conv1 = nn.Conv2d(1, 64, kernel_size=7, stride=2, padding=3, bias=False)
+model.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3, bias=False)
 num_features = model.fc.in_features
 model.fc = nn.Linear(num_features, 2)
 
